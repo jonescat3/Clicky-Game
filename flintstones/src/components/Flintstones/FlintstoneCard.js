@@ -1,7 +1,7 @@
 import React from "react";
-import "./FriendCard.css";
+import "./FlintstoneCard.css";
 
-const FriendCard = props => (
+const FlintstoneCard = props => (
   <div className="card">
     <div className="img-container">
       <img alt={props.name} src={props.image} />
@@ -9,14 +9,11 @@ const FriendCard = props => (
     <div className="content">
       <ul>
         <li>
-          <strong>Name:</strong> {props.name}
+          <strong>Flintstone Game:</strong> {props.name}
         </li>
       </ul>
     </div>
-    <span onClick={() => props.removeFriend(props.id)} className="remove">
-      𝘅
-    </span>
   </div>
 );
 
-export default FriendCard;
+export default FlintstoneCard;
