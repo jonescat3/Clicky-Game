@@ -7,43 +7,108 @@
 // import Characters from "./flintstones.json";
 
 import React, { Component } from "react";
-import FlintstoneCard from "./components/FlintstoneCard";
+import Navbar from "./components/Navbar";
+import flintstones from "./flintstones.json";
 import Wrapper from "./components/Wrapper";
 import Title from "./components/Title";
-import flintstones from "./flintstones.json";
+import FlintstoneCard from "./Components/FlintstoneCard";
 import "./App.css";
 
+// shuffle function from stackoverflow
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+
 class App extends Component {
-  // Setting this.state.flintstones to the flintstones json array
+
   state = {
-    flintstones
+    flintstones,
+    score: 0,
+    topScore: 0,
+    clickedCharacters: []
   };
 
-  removeFlintstones = id => {
-    // Filter this.state.flintstones for flintstones with an id not equal to the id being removed
-    const flintstones = this.state.flintstones.filter(flintstones => flintstones.id !== id);
-    // Set this.state.flintstones equal to the new flintstones array
-    this.setState({ flintstones });
+  clickedImage = id => {
+    // assign the state of the empty array to a let to be updated
+    let clickedCharacters = this.state.clickedCharacters;
+    let score = this.state.score;
+    let topScore = this.state.topScore;
+
+    // if the clicked image has an id of the indexed characters
+    if (clickedCharacters.indexOf(id) === -1) {
+      // push that id into that id into the array to be stored
+      clickedCharacters.push(id);
+      console.log(clickedCharacters);
+      // run the score function
+      this.handleIncrement();
+      // run the reshuffle function after each click
+      this.makeShuffle();
+    } else if (this.state.score === 12) {
+      alert("You win, you clicked each character with out clicking doubles")
+      this.setState({
+        score: 0,
+        clickedCharacters: []
+      });
+    } else {
+      this.setState({
+        score: 0,
+        clickedCharacters: []
+      });
+      console.log("duplicate")
+      alert("Sorry you clicked the same person twice, start over")
+    }
+
+    if (score > topScore) {
+      this.setState({
+        topScore: score
+      })
+    } 
+  }
+
+  // handleIncrement increases this.state.score by 1
+  handleIncrement = () => {
+    // setState updates a components states
+    this.setState({ score: this.state.score + 1 });
   };
 
-  // Map over this.state.flintstones and render a FlintstoneCard component for each flintstones object
+  // shuffle up images
+  makeShuffle = () => {
+    this.setState({ characters: shuffle(Title) })
+  }
+
+  // reset = () => {
+  //   this.setState({ score: 0 })
+  // }
+  
+
   render() {
     return (
-      <Wrapper>
-        <Title>Flintstones List</Title>
-        {this.state.flintstones.map(flintstones => (
-          <FlintstoneCard
-            removeFlintstones={this.removeFlintstones}
-            name={flintstones.name}
-            image={flintstones.image}
-          />
-        ))}
-      </Wrapper>
-    );
+      <div>
+        <Navbar
+          score={this.state.score}
+          topScore={this.state.topScore}
+        />
+        <Title />
+        <Wrapper>
+          {this.state.characters.map(character => (
+            <flintstones
+              key={character.id}
+              id={character.id}
+              name={character.name}
+              image={character.image}
+              clickedImage={this.clickedImage}
+            />
+          ))}
+        </Wrapper>
+      </div>
+    )
   }
 }
 
 export default App;
 
-
-// const characters=['Fred Flintstone', 'Wilma Flintstone', 'Pebbles Flinstone', 'Dino', 'Barney Rubble', 'Betty Rubble' 'Bamm-Bamm Rubble', 'The Great Gazoo', 'Mr Slate', 'Arnold', 'Hoppy', 'Bird' ]

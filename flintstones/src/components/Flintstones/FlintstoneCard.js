@@ -2,10 +2,11 @@ import React from "react";
 import "./FlintstoneCard.css";
 
 const FlintstoneCard = props => (
-  <div className="card">
+  <div className="card" onClick={() => props.clickedImage(props.id)}>
     <div className="img-container">
       <img alt={props.name} src={props.image} />
     </div>
+
     <div className="content">
       <ul>
         <li>
